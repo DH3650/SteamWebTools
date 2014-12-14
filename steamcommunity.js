@@ -533,7 +533,7 @@ function inventoryPageInit(){
             '个物品, 共获得' + receivedgems_total + '个宝石';
           console.log('%c' + _msg, 'background: #000000;color: #eeee11');
           alert(_msg);
-          setTimeout('cancel_grind()', 0);
+          setTimeout(function(){ cancel_grind(); }, 0);
           finished = false;
         } 
       }
