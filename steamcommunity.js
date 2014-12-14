@@ -575,7 +575,6 @@ function inventoryPageInit(){
                 _item['appid'] = _desc['app_data']['appid'];
                 _item['market_hash_name'] = _desc['market_hash_name'];
                 bgs_ems.push(_item);
-                console.log(_item['market_hash_name']);//
               }
             }
           }
@@ -594,7 +593,7 @@ function inventoryPageInit(){
               '0</span> | 粉碎失败数量: <span id="swt_num_grindfailed">' + 
               '0</span><br> 最新信息: <span id="swt_item_recycled">...</span>';
           document.getElementById('swt_goo_info').innerHTML = HTMLgooinfo;
-          document.getElementById('swt_goo_btn').innerHTML = '粉碎中..点击取消';
+          document.getElementById('swt_goo_btn').innerHTML = '粉碎中..点击停止';
           document.getElementById('swt_goo_btn').onclick = cancel_grind;
           if(isltd_price){
             timer_push = setInterval(handler_push, 500);
