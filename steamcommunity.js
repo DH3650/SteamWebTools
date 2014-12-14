@@ -569,9 +569,10 @@ function inventoryPageInit(){
             _items = _data['rgInventory'];
             _descs = _data['rgDescriptions'];
             for (var i in _items) {
-              var _item = _items[i];
-              var _desc = _descs[ _item['classid'] + '_' + _item['instanceid'] ];
-              if (!/(Trading Card|Booster Pack|Steam Gems|\u96c6\u6362\u5f0f\u5361\u724c|\u4ea4\u63db\u5361\u7247|\u8865\u5145\u5305|\u64f4\u5145\u5305)/.test(_desc['type'])) {
+              var _item = _items[i], 
+                _desc = _descs[ _item['classid'] + '_' + _item['instanceid'] ], 
+                _type = _desc && _desc['type'];
+              if (_type && !/(Trading Card|Booster Pack|Steam Gems|\u96c6\u6362\u5f0f\u5361\u724c|\u4ea4\u63db\u5361\u7247|\u8865\u5145\u5305|\u64f4\u5145\u5305)/.test(_type)) {
                 _item['appid'] = _desc['app_data']['appid'];
                 _item['market_hash_name'] = _desc['market_hash_name'];
                 bgs_ems.push(_item);
