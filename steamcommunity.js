@@ -668,7 +668,7 @@ function inventoryPageInit(){
 							crossDomain: true,
 							xhrFields: { withCredentials: true }
 						} ).done( function ( data ) {
-							$('#market_sell_dialog_item_availability_hint>.market_dialog_topwarning').text(['Выставлен №','Выставлен №','Выставлен № todo'][langNo] + window.SellItemDialog._itemNum);
+							$('#market_sell_dialog_item_availability_hint>.market_dialog_topwarning').text(['to sell No.','Выставлен №','正在出售... 第'][langNo] + window.SellItemDialog._itemNum);
 							if(window.SellItemDialog._itemNum>=window.SellItemDialog._amount)
 								window.SellItemDialog.OnSuccess( { responseJSON: data } );
 							else {
