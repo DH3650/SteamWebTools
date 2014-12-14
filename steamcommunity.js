@@ -40,7 +40,7 @@ function init(){
 }
 
 function pendingGiftInit(){
-	$('#tabcontent_pendinggifts > .pending_gifts_header:first-child').after('<div style="margin: 0px 0px 24px"><a class="btn_darkblue_white_innerfade btn_medium" href="#" onClick="acceptAllGifts();"><span>' + ['Accept All Gifts to Inventory)','Сложить все в инвентарь','接受所有礼物至库存'][langNo] + '</span></a></div>');
+	$('#tabcontent_pendinggifts > .pending_gifts_header:first-child').after('<div style="margin: 0px 0px 24px"><a class="btn_darkblue_white_innerfade btn_medium" href="#" onClick="acceptAllGifts();"><span>' + ['Accept All Gifts to Inventory','Сложить все в инвентарь','接受所有礼物至库存'][langNo] + '</span></a></div>');
 	window.acceptAllGifts = function() {
 		var giftHolderz = $('div[id^=unpacked_gift_]');
 		var gifts = Array();
@@ -446,7 +446,8 @@ function inventoryPageInit(){
                       '的表情和背景将被粉碎成宝石, \n开始后速度约为每0.5秒检查一个物品, 检查通过的物品会被粉碎, 可在浏览器控制台查看物品信息 \n\n是否确认');
       if(!cfm) return false;
 
-      var timer_push, timer_pop, bgs_ems = [], items_stack = [], receivedgems_total = 0, finished = false,
+      var timer_push, timer_pop, bgs_ems = [], items_stack = [], 
+        receivedgems_total = 0, finished = false, inv_datas = [],
         url_goovalue = window.g_strProfileURL + '/ajaxgetgoovalue/' + '?contextid=6&sessionid=' + window.g_sessionID + '&appid=';
       
       
@@ -533,6 +534,7 @@ function inventoryPageInit(){
           console.log('%c' + _msg, 'background: #000000;color: #eeee11');
           alert(_msg);
           setTimeout('cancel_grind()', 0);
+          finished = false;
         } 
       }
 
@@ -548,49 +550,63 @@ function inventoryPageInit(){
       document.getElementById('swt_goo_btn').innerHTML = '正在获取库存数据...';
       document.getElementById('swt_goo_btn').onclick = null;
       
-      jQuery.get(window.g_strInventoryLoadURL + '753/6/', function (data) {
-        if(data.success !== true){
-          alert('获取库存数据失败');
-          return false;
-        }
-        
-        _items = data['rgInventory'];
-        _descs = data['rgDescriptions'];
-        for (var i in _items) {
-          var _item = _items[i];
-          var _desc = _descs[ _item['classid'] + '_' + _item['instanceid'] ];
-          if (!/(Trading Card|Booster Pack|Steam Gems|\u96c6\u6362\u5f0f\u5361\u724c|\u4ea4\u63db\u5361\u7247|\u8865\u5145\u5305|\u64f4\u5145\u5305)/.test(_desc['type'])) {
-            _item['appid'] = _desc['app_data']['appid'];
-            _item['market_hash_name'] = _desc['market_hash_name'];
-            bgs_ems.push(_item);
+      (function get_inv(start){
+        var _pram = start ? ('?start=' + start) : '';
+        jQuery.get(window.g_strInventoryLoadURL + '753/6/' + _pram, function(data){
+          if(data.success !== true){
+            alert('获取库存数据失败');
+            return;
           }
-        }
+          
+          inv_datas.push(data);
+          if(data['more']){
+            get_inv(data['more_start']);
+            return;
+          }
+          
+          while(inv_datas.length !== 0){
+            var _data = inv_datas.pop();
+            _items = _data['rgInventory'];
+            _descs = _data['rgDescriptions'];
+            for (var i in _items) {
+              var _item = _items[i];
+              var _desc = _descs[ _item['classid'] + '_' + _item['instanceid'] ];
+              if (!/(Trading Card|Booster Pack|Steam Gems|\u96c6\u6362\u5f0f\u5361\u724c|\u4ea4\u63db\u5361\u7247|\u8865\u5145\u5305|\u64f4\u5145\u5305)/.test(_desc['type'])) {
+                _item['appid'] = _desc['app_data']['appid'];
+                _item['market_hash_name'] = _desc['market_hash_name'];
+                bgs_ems.push(_item);
+                console.log(_item['market_hash_name']);//
+              }
+            }
+          }
+
+          if(bgs_ems.length === 0){
+            cancel_grind();
+            alert('没有可粉碎的物品');
+            return;
+          }
+
+          var HTMLgooinfo = '可碎粉物品总数: <span id="swt_num_total">' + 
+              bgs_ems.length + '</span><br> 待检查物品数量: <span id="swt_num_tocheck">' + 
+              bgs_ems.length + '</span> | 检查失败物品数量: <span id="swt_num_checkfailed">' + 
+              '0</span><br> 待粉碎数量: <span id="swt_num_togrind">' + 
+              '0</span> | 成功粉碎数量: <span id="swt_num_grindsuccess">' + 
+              '0</span> | 粉碎失败数量: <span id="swt_num_grindfailed">' + 
+              '0</span><br> 最新信息: <span id="swt_item_recycled">...</span>';
+          document.getElementById('swt_goo_info').innerHTML = HTMLgooinfo;
+          document.getElementById('swt_goo_btn').innerHTML = '粉碎中..点击取消';
+          document.getElementById('swt_goo_btn').onclick = cancel_grind;
+          if(isltd_price){
+            timer_push = setInterval(handler_push, 500);
+            timer_pop = setInterval(handler_pop, 800);
+          }else{
+            items_stack = bgs_ems.slice(0);
+            bgs_ems = [];
+            timer_pop = setInterval(handler_pop, 800);
+          }
+        });
         
-        if(bgs_ems.length === 0){
-          cancel_grind();
-          alert('没有可粉碎的物品');
-          return;
-        }
-        
-        var HTMLgooinfo = '可碎粉物品总数: <span id="swt_num_total">' + 
-            bgs_ems.length + '</span><br> 待检查物品数量: <span id="swt_num_tocheck">' + 
-            bgs_ems.length + '</span> | 检查失败物品数量: <span id="swt_num_checkfailed">' + 
-            '0</span><br> 待粉碎数量: <span id="swt_num_togrind">' + 
-            '0</span> | 成功粉碎数量: <span id="swt_num_grindsuccess">' + 
-            '0</span> | 粉碎失败数量: <span id="swt_num_grindfailed">' + 
-            '0</span><br> 最新信息: <span id="swt_item_recycled">...</span>';
-        document.getElementById('swt_goo_info').innerHTML = HTMLgooinfo;
-        document.getElementById('swt_goo_btn').innerHTML = '粉碎中..点击取消';
-        document.getElementById('swt_goo_btn').onclick = cancel_grind;
-        if(isltd_price){
-          timer_push = setInterval(handler_push, 500);
-          timer_pop = setInterval(handler_pop, 800);
-        }else{
-          items_stack = bgs_ems.slice(0);
-          bgs_ems = [];
-          timer_pop = setInterval(handler_pop, 800);
-        }
-      });
+      }());
     }//window.grindallitems
 /*** goooooooooooooo ***/
 
