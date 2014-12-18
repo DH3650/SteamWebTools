@@ -23,6 +23,8 @@
 			"all_frames": true
 		}
 	],
+	
+	"content_security_policy": "script-src 'self' https://maccoyhaha.github.io; object-src 'self'",
 
 	"update_url": "http://v1t.su/projects/steam/webtools/ext-chrome-update.xml"
 }
