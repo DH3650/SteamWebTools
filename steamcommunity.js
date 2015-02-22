@@ -509,8 +509,13 @@ function inventoryPageInit(){
         }
         var _item = bgs_ems.pop();
         jQuery.get(
-          'http://steamcommunity.com/market/priceoverview/?country=' + window.g_strCountryCode + 
-          '&currency=1&appid=753&market_hash_name=' + _item['market_hash_name'], 
+          'http://steamcommunity.com/market/priceoverview/', 
+          {
+            country : window.g_strCountryCode,
+            currency: window.g_rgWalletInfo && window.g_rgWalletInfo['wallet_currency'] || 1,
+            appid : 753,
+            market_hash_name : _item.market_hash_name || _item.market_name
+          },
           function (data) {
             if(!data['lowest_price']){
               count('swt_num_checkfailed');
