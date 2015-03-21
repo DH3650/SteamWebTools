@@ -15,5 +15,5 @@
 
 var script = document.createElement('script');
 script.type = 'text/javascript';
-script.src = '//maccoyhaha.github.io/SteamWebTools/steamwebtools.base.js';
+script.src = '//dh3650.github.io/SteamWebTools/steamwebtools.base.js';
 document.body.appendChild(script);

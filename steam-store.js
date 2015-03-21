@@ -19,10 +19,12 @@ switch(steamLanguage && steamLanguage[2]){
 function init() {
 
 	// for age check
+	/*
 	if(window.location.pathname.indexOf('/agecheck')==0){
 		document.cookie='birthtime=-1704124799; expires=21-Dec-2015 00:00:00 GMT; path=/';
 		window.location.reload();
 	}
+    */
 
 	// cc switcher
 	var global_action_menu = document.getElementById('global_action_menu');
@@ -77,6 +79,7 @@ function init() {
 
 			function getPrice(cc){
 				var reqUrl = 'http://store.steampowered.com/api/';
+
 
 				reqUrl += ((itemType=='app')
 					? 'appdetails/?filters=basic,price_overview,packages&v=1&appids='
