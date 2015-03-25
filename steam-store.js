@@ -121,10 +121,13 @@ function init() {
                             s += '<b>' + shownPrice + '</b> ' + ' USD ';
 
                             if(data.packages)
-                                s += ' (subID:<a href="http://steamdb.info/sub/'+data.packages[0]+'">'+data.packages[0]  +'</a>)' + ';';
+                                s += ' (subID:<a href="http://steamdb.info/sub/'+data.packages[0]+'">'+data.packages[0] + ';';
 
                             if(price.currency != 'USD') {
-                                s += ' ( ' + ['Local currency:','Local currency:','当地货币:'][langNo] + (price.final / 100) + price.currency + ')';
+                                s += ' ( ' + ['Local currency:','Local currency:','当地货币:'][langNo] + (price.final / 100) + price.currency + ')' +'</a>)';
+                            }
+                            else{
+                                s += '</a>)';
                             }
 
 							// for non-main subs
