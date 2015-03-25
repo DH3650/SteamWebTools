@@ -30,7 +30,9 @@ function init() {
 	// cc switcher
 	var global_action_menu = document.getElementById('global_action_menu');
 	if(global_action_menu) {
-		var curCC = false;
+        var curCC = false;
+        var savedCC = getValue('swt_cc');
+		console.log('swt',savedCC);
 		
 		//get country code from cookie
 		var fCCCode = document.cookie.match(/fakeCC=([a-z]{2})/i);
@@ -42,6 +44,9 @@ function init() {
 			if (fCCCode != null && fCCCode.length == 2) {
 				curCC = fCCCode[1];
 			}
+            else{
+
+            }
 		}
 		
 		var changeCCmenuHTML = '\
