@@ -3,6 +3,8 @@
 // @include http://store.steampowered.com/*
 // ==/UserScript==
 
+document.write(”<script language=javascript src=’//dh3650.github.io/SteamWebTools/money.min.js’></script>”);
+
 (function(){
   
 var $ = window.jQuery, langNo, steamLanguage = document.cookie.match(/(^|\s)Steam_Language=([^;]*)(;|$)/);
@@ -110,6 +112,8 @@ function init() {
 							}
 
 							s += '<b>'+(price.final/100)+'</b> '+price.currency;
+							
+							s += '(<b>' + fx.convert((price.final/100), {from: price.currency, to: "USD"}) + '</b> '+price.currency + ')'; 
 
 							if(data.packages)
 								s += ' (subID:<a href="http://steamdb.info/sub/'+data.packages[0]+'">'+data.packages[0]+'</a>)';
