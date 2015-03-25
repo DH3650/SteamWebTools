@@ -110,19 +110,22 @@ function init() {
 								s += '<s>'+(price.initial/100)+'</s> <span class="discount_pct">-'+price.discount_percent+'%</span> ';
 							}
 
+                            //need support from Enhanced_Steam(https://github.com/jshackles/Enhanced_Steam)
+                            var shownPrice;
+                            if(price.currency == 'USD')
+                                shownPrice = (price.final / 100);
+                            else
+                                shownPrice = (price.final / 100 / getValue(price.currency + 'toUSD')).toFixed(2);
 
+                            s += '<b>' + shownPrice + '</b> ' + ' USD ';
 
-                            if(price.currency == 'USD') {
-                                s += '<b>' + (price.final / 100) + '</b> ' + price.currency;
+                            if(data.packages)
+                                s += ' (subID:<a href="http://steamdb.info/sub/'+data.packages[0]+'">'+data.packages[0]+'</a>)';
+
+                            if(price.currency != 'USD') {
+                                s += ' ( ' + ['Local currency:','Local currency:','当地货币:'][langNo] + (price.final / 100) + price.currency + ')';                  ';
                             }
-                            else{
-                                //need support from Enhanced_Steam(https://github.com/jshackles/Enhanced_Steam)
-                                s += '<b> ≈' + (price.final/100 / getValue(price.currency + 'toUSD')).toFixed(2) + '</b> ' + ' USD ';
-                                s += ' ( ' + ['Local currency:','Local currency:','当地货币:'][langNo] + (price.final / 100) + price.currency + ')';
-                            }
 
-							if(data.packages)
-								s += ' (subID:<a href="http://steamdb.info/sub/'+data.packages[0]+'">'+data.packages[0]+'</a>)';
 							// for non-main subs
 							try{
 								var pg = data.package_groups[0].subs;
