@@ -112,7 +112,7 @@ function init() {
 
 							s += '<b>'+(price.final/100)+'</b> '+price.currency;
 							
-							s += '(<b>' + fx.convert((price.final/100), {from: price.currency, to: "USD"}) + '</b> USD)'; 
+							
 
 							if(data.packages)
 								s += ' (subID:<a href="http://steamdb.info/sub/'+data.packages[0]+'">'+data.packages[0]+'</a>)';
