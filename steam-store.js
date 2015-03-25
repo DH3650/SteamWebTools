@@ -13,7 +13,7 @@ switch(steamLanguage && steamLanguage[2]){
     case 'schinese' : langNo = 2; break;
     case 'tchinese' : langNo = 2; break;
     case 'simplified chinese' : langNo = 2; break;
-    case 'traditional chinese' : langNo = 2; break; 
+    case 'traditional chinese' : langNo = 2; break;
     default : langNo = 0;
 }
 
@@ -110,10 +110,15 @@ function init() {
 								s += '<s>'+(price.initial/100)+'</s> <span class="discount_pct">-'+price.discount_percent+'%</span> ';
 							}
 
-							s += '<b>'+(price.final/100)+'</b> '+price.currency;
 
-                            if(price.currency != 'USD'){
-                                s += ' ( ≈ ' + (price.final / getValue(price.currency + 'toUSD')) + ' USD )';
+
+                            if(price.currency == 'USD') {
+                                s += '<b>' + (price.final / 100) + '</b> ' + price.currency;
+                            }
+                            else{
+                                //need support from Enhanced_Steam(https://github.com/jshackles/Enhanced_Steam)
+                                s += '<b> ≈' + (price.final/100 / getValue(price.currency + 'toUSD')) + '</b> ' + ' USD ';
+                                s += ' ( ' + ['Local currency:','Local currency:','当地货币:'] + (price.final / 100) + price.currency + ')';
                             }
 
 							if(data.packages)
