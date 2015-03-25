@@ -37,7 +37,7 @@ function init() {
 			curCC = fCCCode[1];
 		} 
 		else {
-			fCCCode = cookies.match(/steamCC(?:_\d+){4}=([a-z]{2})/i);
+			fCCCode = document.cookies.match(/steamCC(?:_\d+){4}=([a-z]{2})/i);
 			if (fCCCode != null && fCCCode.length == 2) {
 				curCC = fCCCode[1];
 			}
