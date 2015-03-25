@@ -117,8 +117,8 @@ function init() {
                             }
                             else{
                                 //need support from Enhanced_Steam(https://github.com/jshackles/Enhanced_Steam)
-                                s += '<b> ≈' + (price.final/100 / getValue(price.currency + 'toUSD')) + '</b> ' + ' USD ';
-                                s += ' ( ' + ['Local currency:','Local currency:','当地货币:'] + (price.final / 100) + price.currency + ')';
+                                s += '<b> ≈' + (price.final/100 / getValue(price.currency + 'toUSD')).toFixed(2) + '</b> ' + ' USD ';
+                                s += ' ( ' + ['Local currency:','Local currency:','当地货币:'][langNo] + (price.final / 100) + price.currency + ')';
                             }
 
 							if(data.packages)
