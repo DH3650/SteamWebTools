@@ -32,22 +32,28 @@ function init() {
 	if(global_action_menu) {
         var curCC = false;
         var savedCC = getValue('swt_cc');
-		console.log('swt',savedCC);
-		
-		//get country code from cookie
-		var fCCCode = document.cookie.match(/fakeCC=([a-z]{2})/i);
-		if (fCCCode != null && fCCCode.length == 2) {
-			curCC = fCCCode[1];
-		} 
-		else {
-			fCCCode = document.cookie.match(/steamCC(?:_\d+){4}=([a-z]{2})/i);
-			if (fCCCode != null && fCCCode.length == 2) {
-				curCC = fCCCode[1];
-			}
-            else{
+        var fCCCode = document.cookie.match(/fakeCC=([a-z]{2})/i);
+        var steamCCCode = document.cookie.match(/steamCC(?:_\d+){4}=([a-z]{2})/i);
+		console.log('swt',savedCC,fCCCode,steamCCCode);
 
+		//get country code from cookie
+        if (steamCCCode != null && steamCCCode.length == 2) {
+            curCC = steamCCCode[1];
+        }
+        else{
+            if (fCCCode != null && fCCCode.length == 2) {
+                curCC = fCCCode[1];
             }
-		}
+            else {
+                if(savedCC != null){
+                    curCC = savedCC;
+                }
+                else{
+                    console.log('swt','load cc info failed!!!');
+                }
+            }
+        }
+
 		
 		var changeCCmenuHTML = '\
 		<style>#cc_menu_btn{min-width:59px;padding:0 15px;z-index:999;background-color:#000;opacity:0.5;}#cc_menu_btn:hover{opacity:1}#cc_list .popup_menu_item{white-space:nowrap}</style>\
@@ -239,7 +245,7 @@ _cc = {
 		var s='';
 		_cc.ListA = _cc.curList.split(' ');
 		for(var i=0; i < _cc.ListA.length; i++){
-			s += '<a class="popup_menu_item" href="'+_cc.url+_cc.ListA[i]+'"><img src="http://cdn.steamcommunity.com/public/images/countryflags/'+_cc.ListA[i]+'.gif" style="width:16px"/> '+_cc.ListA[i].toUpperCase()+'</a>';
+			s += '<a onclick="saveSelectedCC(' + _cc.ListA[i] + ')" class="popup_menu_item" href="'+_cc.url+_cc.ListA[i]+'"><img src="http://cdn.steamcommunity.com/public/images/countryflags/'+_cc.ListA[i]+'.gif" style="width:16px"/> '+_cc.ListA[i].toUpperCase()+'</a>';
 		}
 		s += '<a class="popup_menu_item" href="#" onclick="ShowMenu(this, \'cc_list_edit\', \'right\', \'bottom\', true);return false"><img src="http://cdn.steamcommunity.com/public/images/skin_1/iconEdit.gif" style="width:16px"/>' + ['Edit','Редактировать','编辑'][langNo] + '</a>';
 		document.getElementById('cc_list').innerHTML=s;
@@ -259,7 +265,10 @@ _cc = {
 	setDefCcList : function(){
 		document.getElementById('ccListEdit').value = _cc.defList;
 		return false;
-	}
+	},
+    saveSelectedCC : function(selectedCC){
+        setValue('swt_cc',selectedCC);
+    }
 };
 
 _cc.curList = window.localStorage.ccList || _cc.defList;
