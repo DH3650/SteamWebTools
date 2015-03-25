@@ -235,8 +235,7 @@ _cc = {
 		var s='';
 		_cc.ListA = _cc.curList.split(' ');
 		for(var i=0; i < _cc.ListA.length; i++){
-			s += '<a id = s_' + _cc.ListA[i] + ' class="popup_menu_item" href="javascript:;"><img src="http://cdn.steamcommunity.com/public/images/countryflags/'+_cc.ListA[i]+'.gif" style="width:16px"/> '+_cc.ListA[i].toUpperCase()+'</a>';
-            document.getElementById('s_' + _cc.ListA[i]).onclick = _cc.saveSelectedCC(_cc.ListA[i]);
+			s += '<a class="popup_menu_item" href="' + _cc.url + _cc.ListA[i] + '"><img src="http://cdn.steamcommunity.com/public/images/countryflags/'+_cc.ListA[i]+'.gif" style="width:16px"/> '+_cc.ListA[i].toUpperCase()+'</a>';
         }
 		s += '<a class="popup_menu_item" href="#" onclick="ShowMenu(this, \'cc_list_edit\', \'right\', \'bottom\', true);return false"><img src="http://cdn.steamcommunity.com/public/images/skin_1/iconEdit.gif" style="width:16px"/>' + ['Edit','Редактировать','编辑'][langNo] + '</a>';
 		document.getElementById('cc_list').innerHTML=s;
@@ -256,11 +255,7 @@ _cc = {
 	setDefCcList : function(){
 		document.getElementById('ccListEdit').value = _cc.defList;
 		return false;
-	},
-    saveSelectedCC : function(selectedCC){
-        setValue('swt_cc',selectedCC);
-        window.location.href = _cc.url + selectedCC;
-    }
+	}
 };
 
 _cc.curList = window.localStorage.ccList || _cc.defList;
