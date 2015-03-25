@@ -31,29 +31,18 @@ function init() {
 	var global_action_menu = document.getElementById('global_action_menu');
 	if(global_action_menu) {
         var curCC = false;
-        var savedCC = getValue('swt_cc');
-        var fCCCode = document.cookie.match(/fakeCC=([a-z]{2})/i);
-        var steamCCCode = document.cookie.match(/steamCC(?:_\d+){4}=([a-z]{2})/i);
-		console.log('swt',savedCC,fCCCode,steamCCCode);
 
-		//get country code from cookie
-        if (steamCCCode != null && steamCCCode.length == 2) {
-            curCC = steamCCCode[1];
+        //get country code from cookie
+        var fCCCode = document.cookie.match(/fakeCC=([a-z]{2})/i);
+        if (fCCCode != null && fCCCode.length == 2) {
+            curCC = fCCCode[1];
         }
-        else{
+        else {
+            fCCCode = document.cookie.match(/steamCC(?:_\d+){4}=([a-z]{2})/i);
             if (fCCCode != null && fCCCode.length == 2) {
                 curCC = fCCCode[1];
             }
-            else {
-                if(savedCC != null){
-                    curCC = savedCC;
-                }
-                else{
-                    console.log('swt','load cc info failed!!!');
-                }
-            }
         }
-
 		
 		var changeCCmenuHTML = '\
 		<style>#cc_menu_btn{min-width:59px;padding:0 15px;z-index:999;background-color:#000;opacity:0.5;}#cc_menu_btn:hover{opacity:1}#cc_list .popup_menu_item{white-space:nowrap}</style>\
