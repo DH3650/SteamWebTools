@@ -3,7 +3,6 @@
 // @include http://store.steampowered.com/*
 // ==/UserScript==
 
-document.write(”<script language=javascript src=’//dh3650.github.io/SteamWebTools/money.min.js’></script>”);
 
 (function(){
   
