@@ -111,8 +111,10 @@ function init() {
 							}
 
 							s += '<b>'+(price.final/100)+'</b> '+price.currency;
-							
-							
+
+                            if(price.currency != 'USD'){
+                                s += ' ( ≈ ' + (price.final / getValue(price.currency + 'toUSD')) + ' USD )';
+                            }
 
 							if(data.packages)
 								s += ' (subID:<a href="http://steamdb.info/sub/'+data.packages[0]+'">'+data.packages[0]+'</a>)';
@@ -277,6 +279,21 @@ function createBlock(title, links){
 	return out;
 }
 
+
+    // Chrome storage functions
+    function setValue(key, value) {
+        localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function getValue(key) {
+        var v = localStorage.getItem(key);
+        if (v === undefined) return v;
+        return JSON.parse(v);
+    }
+
+    function delValue(key) {
+        localStorage.removeItem(key);
+    }
 
 var state = window.document.readyState;
 if((state == 'interactive')||(state == 'complete'))
